@@ -12,13 +12,13 @@ from microbit import *
 import radio
 
 #### Variables globales ####
-seqNum = 0
-tryTime = 100
-Timeout = 300
-ackMsgId = 255
+seqNum:int = 0
+tryTime: int = 100
+Timeout: int = 300
+ackMsgId: int = 255
 
 #### Start radio module ####
-radio.config(channel=7, address=50)
+radio.config(channel=29, address=50)
 radio.on()
 
 

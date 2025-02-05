@@ -136,7 +136,7 @@ def send_msg(msgId:int, payload:List[int], userId:int, dest:int):
     message.append msgId
     message.append payload
     
-    while receive_ack == False:
+    while receive_ack("Hacké") == False:
         radio.send(msg_to_trame(message))
         sleep(2000)
     '''
@@ -158,6 +158,10 @@ def send_msg(msgId:int, payload:List[int], userId:int, dest:int):
     pass # à compléter
 
 def receive_msg(userId:int):
+    while True:
+        msgRecu = radio.receive()
+        dechiffrer = trame_to_msg(msgRecu)
+        if 
     '''
     Attend un message.
     1) Récupère les messages recus

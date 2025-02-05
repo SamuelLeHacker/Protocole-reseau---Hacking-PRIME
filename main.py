@@ -129,6 +129,16 @@ def receive_ack(msg: Msg):
     
 
 def send_msg(msgId:int, payload:List[int], userId:int, dest:int):
+    
+    message = []
+    message.append dest
+    message.append userId
+    message.append msgId
+    message.append payload
+    
+    while receive_ack == False:
+        radio.send(msg_to_trame(message))
+        sleep(2000)
     '''
     Envoie un message.
     1) Crée un objet Message à partir des paramètres

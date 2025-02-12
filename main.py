@@ -191,11 +191,9 @@ if __name__ == '__main__':
         if button_a.was_pressed():
             send_msg(1,[60],userId, destId)
             
-
+        
                 
         # Reception des messages
-        m = receive_msg(userId)        
-        if m and m.msgId==1:
+        m = receive_msg(userId)
+        if m != None:
             display.show(Image.SQUARE)
-    
-

@@ -189,6 +189,7 @@ if __name__ == '__main__':
         # Messages à envoyer
         destId = 1
         if button_a.was_pressed():
+            display.show(Image.HEART)
             send_msg(1,[60],userId, destId)
             
         

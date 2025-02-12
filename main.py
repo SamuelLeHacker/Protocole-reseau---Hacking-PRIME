@@ -166,7 +166,7 @@ def receive_msg(userId:int):
     while True:
         recu = radio.receive()
         msgRecu = trame_to_msg(recu, userId)
-        if msgRecu != ack:
+        if msgRecu != "Hacké":
             return msgRecu
     '''
     Attend un message.

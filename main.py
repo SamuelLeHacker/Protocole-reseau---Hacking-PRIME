@@ -165,7 +165,7 @@ def send_msg(msgId:int, payload:List[int], userId:int, dest:int):
 def receive_msg(userId:int):
     while True:
         recu = radio.receive()
-        msgRecu = trame_to_msg(msgRecu, userId)
+        msgRecu = trame_to_msg(recu, userId)
         if msgRecu != ack:
             return msgRecu
     '''

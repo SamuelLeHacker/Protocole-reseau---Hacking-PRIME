@@ -12,10 +12,10 @@ from microbit import *
 import radio
 
 #### Variables globales ####
-seqNum:int = 0
-tryTime: int = 100
-Timeout: int = 300
-ackMsgId: int = 255
+seqNum = 0
+tryTime = 100
+Timeout = 300
+ackMsgId = 255
 
 #### Start radio module ####
 radio.config(channel=29, address=50)
@@ -115,6 +115,13 @@ def ack_msg(msg : Message):
 
 
 def receive_ack(msg: Msg):
+    recu = radio.receive_bytes()
+    if recu:
+        msgRecu = bytes_to_int(recu)
+        if msgRecu[-1]== 255:
+            return True
+        else:
+            return False
     '''
     Attend un ack correspondant au message recu.
     1) Récupère les messages recus
@@ -129,21 +136,35 @@ def receive_ack(msg: Msg):
     
 
 def send_msg(msgId:int, payload:List[int], userId:int, dest:int):
-    
-    message = []
-    message.append(dest)
-    message.append(userId)
-    message.append(msgId)
-    message.append(payload)
-    
-    while receive_ack("Hacké") == False:
-        radio.send(msg_to_trame(message))
-        sleep(2000)
-        
-    if receive_ack("Hacké") == True:
+    global seqnum
+    acked = False
+    while acked == False:
+        msg = []
+        msg.append(dest)
+        msg.append(userId)
+        msg.append(msgId)
+        msg.append(payload)
+#         print(msg.msgStr())
+        trame = int_to_bytes(msg)
+#         print(trame)
+        radio.send_bytes(trame)
+        acked = recieve_ack(255)
+    if acked== True:
         return True
-    else:
-        return False
+#     message = []
+#     message.append(dest)
+#     message.append(userId)
+#     message.append(msgId)
+#     message.append(payload)
+#     
+#     while receive_ack("Hacké") == False:
+#         radio.send(msg_to_trame(message))
+#         sleep(2000)
+#         
+#     if receive_ack("Hacké") == True:
+#         return True
+#     else:
+#         return False
     '''
     Envoie un message.
     1) Crée un objet Message à partir des paramètres
@@ -163,11 +184,12 @@ def send_msg(msgId:int, payload:List[int], userId:int, dest:int):
     pass # à compléter
 
 def receive_msg(userId:int):
-    while True:
-        recu = radio.receive()
-        msgRecu = trame_to_msg(recu, userId)
-        if msgRecu != "Hacké":
-            return msgRecu
+    recu = radio.receive_bytes()
+    if recu:
+        msgRecu = bytes_to_int(recu)
+        if msgRecu[0] == userId :   
+            msgObj = Message(msgRecu[0],msgRecu[1],None,msgRecu[2],msgRecu[3],None)
+            return msgObj
     '''
     Attend un message.
     1) Récupère les messages recus
@@ -178,7 +200,7 @@ def receive_msg(userId:int):
             Returns:
                     msgRecu(Message): Objet Message contenant tous les paramètres du message
     '''
-    pass # à compléter
+
 
 
 if __name__ == '__main__':
@@ -190,7 +212,9 @@ if __name__ == '__main__':
         destId = 1
         if button_a.was_pressed():
             display.show(Image.HEART)
+            display.clear
             send_msg(1,[60],userId, destId)
+
             
         
                 
